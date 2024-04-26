@@ -13,12 +13,13 @@ private:
 public:
     transactionDatabase() : inTransaction(false){}
 
-    int get(const string& key){
-        if(finalStore.find(key) != finalStore.end()){
-            return finalStore[key];
+    int* get(const string& key){
+        auto it = finalStore.find(key);
+        if(it != finalStore.end()){
+            return &(it->second);
         }
         else{
-            return -1;
+            return nullptr;
         }
     }
 
@@ -66,7 +67,13 @@ public:
 int main(){
     transactionDatabase transDB;
 
-    cout << transDB.get("A") << endl;
+    int* valueA = transDB.get("A");
+    if(valueA != nullptr){
+        cout << *valueA << endl;
+    }
+    else{
+        cout << "NULL" << endl;
+    }
 
     try{
         transDB.put("A", 5);
@@ -79,13 +86,25 @@ int main(){
 
     transDB.put("A", 5);
 
-    cout << transDB.get("A") << endl;
+    int* valueAAfterPut = transDB.get("A");
+    if(valueAAfterPut != nullptr){
+        cout << *valueAAfterPut << endl;
+    }
+    else{
+        cout << "NULL" << endl;
+    }
 
     transDB.put("A", 6);
 
     transDB.commit();
 
-    cout << transDB.get("A") << endl;
+    int* valueAAfterCommit = transDB.get("A");
+    if(valueAAfterCommit != nullptr){
+        cout << *valueAAfterCommit << endl;
+    }
+    else{
+        cout << "NULL" << endl;
+    }
 
     try{
         transDB.commit();
@@ -101,8 +120,13 @@ int main(){
         cout << e.what() << endl;
     }
 
-
-    cout << transDB.get("B") << endl;
+    int* valueB = transDB.get("B");
+    if(valueB != nullptr){
+        cout << *valueB << endl;
+    }
+    else{
+        cout << "NULL" << endl;
+    }
 
     transDB.begin_transaction();
 
@@ -110,8 +134,13 @@ int main(){
 
     transDB.rollback();
 
-    cout << transDB.get("B") << endl;
-
+    int* valueBAfterRollback = transDB.get("B");
+    if(valueBAfterRollback != nullptr){
+        cout << *valueBAfterRollback << endl;
+    }
+    else{
+        cout << "NULL" << endl;
+    }
 
     return 0;
 }
