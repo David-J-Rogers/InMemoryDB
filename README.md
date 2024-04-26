@@ -1,7 +1,8 @@
 # InMemoryDB
 
 ## Description
-This project was designed to replicate transactions in the real world. It consists of a class with relevant functions and a series of tests in main. 
+This project was designed to replicate transactions in the real world. It consists of a class with relevant functions and a series of tests* in main. 
+* Instead of returning null I just returned -1 for values that could not be obtained. 
 
 ## Installation
 Simply clone the repository to your local machine.
